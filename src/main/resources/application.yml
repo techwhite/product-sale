@@ -1,0 +1,15 @@
+#
+## database connection configuration
+#spring:
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/hkzf
+#    username: root
+#    # todo: should save in more secure places like key store
+#    password: admin123
+#
+#  # Hibernate configuration
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+##      dialect=org.hibernate.dialect.MySQL5Dialect
+#    show-sql: true
