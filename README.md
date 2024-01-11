@@ -1,62 +1,267 @@
-# Backend Engineering Practical Test
+# RESTful API Documentation
 
-You will be implementing a simple API. You may use any language or technology you prefer. 
-It's recommended that you set up a working development environment ahead of time.
+## Introduction
 
-You may ask questions, reference documentation, or search for help on Google, Stack Overflow, or anywhere else. 
-Please email the person who set up your interview with any questions you have. 
+This document provides comprehensive information about the RESTful API project. It covers the various endpoints,
+request methods, request and response formats, authentication, and other relevant details.
 
-When you have finished a stage in the interview, please commit you code so we can review each stage independently.
+## Authentication
 
-We ask that you take 4 hours to take the test. Don’t worry if you don’t complete every stage, we are more interested in how you approach the problem and where you choose to spend your time.
+The API requires authentication using API keys. Include the API key/value in the headers of each request:
+### key
+```text
+Authorization
+```
+### value
+```text
+Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmR5LnlvdSIsImlhdCI6MTcwNDU5NDY1M30" +
+".RdBMCIUlpZJJ0-mHWNwwzJc70cuNOR2BoTz385GBtOA
+```
 
-> [!TIP]
-> We would rather see a less complete, but more polished submission than a complete but unpolished submission, so we can see an example of your best work.
+## Endpoints
 
-Please be ready to share your screen with your service running to demonstrate your API endpoints to us (using the tool of your choice, e.g. Postman, cURL, etc). We may ask you to make some requests to test your API so it would be handy to have this prepared beforehand.
+### Product Related
+#### Base URL
+```text
+/products
+```
+#### 1. getAllProducts
+```text
+GET /products
+```
+##### Description:
+```text
+retrieve all product list and their detail info
+```
+##### Parameters:
+none
+##### Response Body:
+```json
+[
+    {
+        "id": 11,
+        "name": "Chrome Toaster",
+        "price": 100.00
+    },
+    {
+        "id": 12,
+        "name": "Copper Kettle",
+        "price": 49.99
+    },
+    {
+        "id": 13,
+        "name": "Mixing Bowl",
+        "price": 20.00
+    },
+    {
+        "id": 77,
+        "name": "andy.you1",
+        "price": 20.00
+    },
+    {
+        "id": 78,
+        "name": "andy.you2",
+        "price": 2345.00
+    }
+]
+```
+#### 1.1 Pagination
+```text
+GET /products?page=1&per_page=10
+```
+##### Description
+```text
+use page and size parameters to implement Pagination ability.
+```
 
-## Stage 1
+#### 2. saveProduct
+```text
+Post /products
+```
+##### Description:
+```text
+Save a new Product and can be retrieved by #1 endpoint
+```
+##### Header
+```text
+Content-Type: application/json
+```
 
-`GET /products`
-Create an API endpoint that serves a list of products that can be sold.
+##### Request Body:
+```json
+{
+    "name": "Chrome Toaster1",
+    "price": 100
+}
+```
+##### Response Example:
+```json
+{
+    "id": 123,
+    "name": "Chrome Toaster1",
+    "price": 100
+}
+```
 
-A product consists of:
-- A unique ID
-- A name
-- A price
+#### 3. sale
+```text
+Post /products
+```
+##### Description:
+```text
+Sale all products in the request and return revenue
+```
+##### Header
+```text
+Content-Type: application/json
+```
 
-Products may be stored in memory. An external database may be used, but is not required.
+##### Request Body:
+```json
+[
+  {
+    "id": 11,
+    "quantity": 2
+  },
+  {
+    "id": 13,
+    "quantity": 1
+  }
+]
+```
+##### Response Example:
+```json
+{
+    "requestList": [
+        {
+            "id": 11,
+            "quantity": 2
+        },
+        {
+            "id": 13,
+            "quantity": 1
+        }
+    ],
+    "total_price_item": [
+        {
+            "id": 11,
+            "revenue": 200.00
+        },
+        {
+            "id": 13,
+            "revenue": 20.00
+        }
+    ],
+    "total_price": 220.00
+}
+```
+#### 4. saleWithDiscount
+```text
+Post /products/discount
+```
+##### Description:
+```text
+sale all products with discount in the request and return revenue with discount for each item
+```
+##### Header
+```text
+Content-Type: application/json
+```
 
-|      Name      | Price  |
-|:--------------:|:------:|
-| Chrome Toaster |  $100  |
-| Copper Kettle  | $49.99 |
-|  Mixing Bowl   |  $20   |
+##### Request Body:
+```json
+{
+  "total_discount": 15,
+  "requestList":
+  [
+    {
+      "id": 11,
+      "quantity": 2
+    },
+    {
+      "id": 13,
+      "quantity": 1
+    }
+  ]
+}
+```
+#####  Response Example:
+```json
+{
+    "request": {
+        "total_discount": 15.0,
+        "requestList": [
+            {
+                "id": 11,
+                "quantity": 2
+            },
+            {
+                "id": 13,
+                "quantity": 1
+            }
+        ]
+    },
+    "discountItemList": [
+        {
+            "id": 11,
+            "revenue": 186.363636363636363,
+            "discount": 13.636363636363637
+        },
+        {
+            "id": 13,
+            "revenue": 18.6363636363636367,
+            "discount": 1.3636363636363633
+        }
+    ],
+    "total_revenue": 205.00
+}
+```
 
+## Error Handling
+### Global Exception Handler
+```text
+// Global exception handling involves the centralization of exception handling logic.
+// It defines how the application should respond to different types of exceptions, like
+// logging the error, providing custom error messages, and returning specific HTTP status codes.
+```
 
-## Stage 2
-`POST /products` Create an API endpoint that allows creating a new product.
+### HttpStatus
+```text
 
-The response should contain the product details in the same format as Stage 1.
+The API follows standard HTTP status codes. In case of an error, additional details will be provided in the response body.
 
-The new product must be persisted so that the endpoint from stage 1 includes the new product in its responses.
+Example error response:
+```
 
-## Stage 3
-`POST /sales` Create an API endpoint that allows sales to be made. It is not necessary to persist sales.
+```json
+{
+  "code": 200,
+  "status": "OK",
+  "message": "Can't find one Product for the Request!",
+  "stackTrace": null,
+  "data": null
+}
+```
+```json
+{
+    "code": 422,
+    "status": "UNPROCESSABLE_ENTITY",
+    "message": "Product with same name already exists!",
+    "stackTrace": null,
+    "data": null
+}
+```
 
-A sale request consists of:
-- An array of line items.
-- Each line item includes a product ID and a quantity.
+## Rate Limits
+```text
+All API endpoints have request rate limit. Current setting is 5 request maxium per second.
+It's important since current program doesn't have cache layer and all requests will interactive 
+with db
+```
 
-A sale response consists of:
-- Everything in the sale request
-- A total for each line item.
-- A total price of sale.
+## Versioning
 
-## Stage 4
-Modify the sales API to allow discounts on the overall sale. The discount on the sale is a flat dollar amount (i.e. $10 off the total as opposed to 10% off the total).
-
-The sale request is modified to add a new discount field, representing the total discount across the entire sale.
-
-For tax reasons, the discount must be spread proportionally across the line items in the sale, taking into account line item quantity and price. Each line item in the response should also include a discount field containing the proportion of the discount for that line item.
-
+## Changelog
+version: v1
+date: Jan 8th, 2024
+Author: Andy You
