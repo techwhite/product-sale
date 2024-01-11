@@ -31,7 +31,7 @@ public class ProductService {
 
     // save new product into db.
     // return null if having duplicated name in db
-    @Transactional
+    // note: don't need adding @Transactional
     public ProductEntity saveProduct(ProductEntity product) {
         // check if already exist in db
         boolean exist = productRepository.existsByName(product.getName());
@@ -44,8 +44,7 @@ public class ProductService {
 
 
     // delete one product by id. if doesn't exist, return false; or return true
-    // @Transactional annotation make sure this function is atomic since it has two steps
-    @Transactional
+    // don't need adding @Transactional since it's used for few data operations and wanting them take effect togerther
     public boolean deleteProductById(Integer id) {
         if (!productRepository.existsById(id)) {
             return false;

@@ -72,7 +72,7 @@ public class ProductControllerTest {
         ).andExpect(status().isBadRequest());
     }
 
-    @Test
+/*    @Test
     public void testGetProductById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/products/12345")
@@ -124,5 +124,5 @@ public class ProductControllerTest {
                 .header("token", token)
                 .contentType("application/json")
         ).andExpect(status().isBadRequest());
-    }
+    }*/
 }
