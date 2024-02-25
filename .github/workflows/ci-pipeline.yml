@@ -11,22 +11,26 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: $
+        aws-secret-access-key: $
+        aws-region: $
 
-#    - name: Login to AWS ECR
-#      run: aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 149226120595.dkr.ecr.ap-southeast-2.amazonaws.com
-      
+    - name: Login to AWS ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
     - name: Build Docker image
-      run: docker build -t product-sale-img .
-      
-    - name: Tag Docker image
-      run: docker tag product-sale-img:latest 149226120595.dkr.ecr.ap-southeast-2.amazonaws.com/product-sale:latest
+      run: docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
       
     - name: Push Docker image to AWS ECR
-      run: docker push 149226120595.dkr.ecr.ap-southeast-2.amazonaws.com/product-sale:latest
+      run: docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: ap-southeast-2
+        ECR_REGISTRY: 149226120595.dkr.ecr.ap-southeast-2.amazonaws.com
+        ECR_REPOSITORY: product-sale
+        IMAGE_TAG: latest
+#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        AWS_REGION: ap-southeast-2
