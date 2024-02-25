@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.lightspeed</groupId>
-	<artifactId>practical-test</artifactId>
+	<artifactId>product-sale</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>restful-api</name>
 	<description>project used for product management and sale</description>

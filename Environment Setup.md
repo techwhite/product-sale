@@ -13,10 +13,10 @@ Stop MySQL Server：
 brew services stop mysql
 
 Connect to Server：
-mysql -u root -p
+mysql -u root
 
 MySQL Command:
-Create DB: practical_test
+Create DB: product-sale
 
 Add userName and Password as application.properties said
 ```
