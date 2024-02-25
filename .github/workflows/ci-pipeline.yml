@@ -14,9 +14,9 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: $
-        aws-secret-access-key: $
-        aws-region: $
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Login to AWS ECR
       id: login-ecr
@@ -31,6 +31,3 @@ jobs:
         ECR_REGISTRY: 149226120595.dkr.ecr.ap-southeast-2.amazonaws.com
         ECR_REPOSITORY: product-sale
         IMAGE_TAG: latest
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        AWS_REGION: ap-southeast-2
