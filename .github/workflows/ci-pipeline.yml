@@ -7,6 +7,10 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      ECR_REGISTRY: 149226120595.dkr.ecr.ap-southeast-2.amazonaws.com
+      ECR_REPOSITORY: product-sale
+      IMAGE_TAG: latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -27,7 +31,3 @@ jobs:
       
     - name: Push Docker image to AWS ECR
       run: docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-      env:
-        ECR_REGISTRY: 149226120595.dkr.ecr.ap-southeast-2.amazonaws.com
-        ECR_REPOSITORY: product-sale
-        IMAGE_TAG: latest
