@@ -1,0 +1,28 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Login to AWS ECR
+      run: aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 149226120595.dkr.ecr.ap-southeast-2.amazonaws.com
+      
+    - name: Build Docker image
+      run: docker build -t product-sale-img .
+      
+    - name: Tag Docker image
+      run: docker tag product-sale-img:latest 149226120595.dkr.ecr.ap-southeast-2.amazonaws.com/product-sale:latest
+      
+    - name: Push Docker image to AWS ECR
+      run: docker push 149226120595.dkr.ecr.ap-southeast-2.amazonaws.com/product-sale:latest
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ap-southeast-2
