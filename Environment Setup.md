@@ -32,3 +32,17 @@ Java -jar target/practical-test-0.0.1-SNAPSHOT.jar
 Test by Postman, you can find http url and request samples in "Restful API Technique Document.md"
 ```
 
+
+
+[//]: # (-------------------visa part-------------------)
+# step1
+login into https://developer.visa.com/identity/user/login
+username: yczhyou@gmail.com
+
+# step2
+"VISA_CONNECTOR" -> "Credentials" to download the cert credentials
+
+# reference
+if the cert expired, then should follow this to create a new one: https://developer.visa.com/pages/working-with-visa-apis/two-way-ssl
+This is the complete guid for visa development: https://developer.visa.com/pages/working-with-visa-apis/visa-developer-quick-start-guide
+
