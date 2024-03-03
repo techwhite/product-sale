@@ -1,5 +1,8 @@
 package com.ecom.productsale.proxy;
 
+import com.ecom.productsale.model.VisaResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.RequestConfig;
@@ -85,7 +88,7 @@ public class HttpAsyncClientProxy {
     /*
     submit is sync method, but http is async. So also has a good performance
      */
-    public String execute(String url) throws InterruptedException, ExecutionException, IOException {
+    public VisaResponse execute(String url) throws InterruptedException, ExecutionException, IOException {
         Future<HttpResponse> future = executorService.submit(() -> {
             HttpGet httpGet = new HttpGet(url);
             httpGet.setHeader("Content-Type", "application/json");
@@ -96,7 +99,11 @@ public class HttpAsyncClientProxy {
         });
 
         HttpResponse response = future.get();
-        return EntityUtils.toString(response.getEntity(), "UTF-8");
+        String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+//        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+//         the field name of java object should be same with json string's
+//        return objectMapper.readValue(result, VisaResponse.class);
+        return null;
     }
 
     public void shutdown() {

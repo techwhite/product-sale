@@ -1,5 +1,8 @@
 package com.ecom.productsale.proxy;
 
+import com.ecom.productsale.model.VisaResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +39,10 @@ public class HttpURLConnectionProxy {
 //        this.executorService = Executors.newCachedThreadPool();
     }
 
-    public String helloWorld(String url) throws Exception {
+    public VisaResponse helloWorld(String url) throws Exception {
         logger.debug("START Two-Way (Mutual) SSL ...");
 
-        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<VisaResponse> future = CompletableFuture.supplyAsync(() -> {
             try {
                 return request(url);
             } catch (Exception e) {
@@ -52,7 +55,7 @@ public class HttpURLConnectionProxy {
         return future.get();
     }
 
-    private String request(String endpointUrl) throws Exception {
+    private VisaResponse request(String endpointUrl) throws Exception {
         // open http connection
         URL url = new URL(endpointUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -78,8 +81,12 @@ public class HttpURLConnectionProxy {
 
         // parse response
         String result = util.getResponseContent(con, status);
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        // the field name of java object should be same with json string's
+        VisaResponse response = objectMapper.readValue(result, VisaResponse.class);
+
         con.disconnect();
 
-        return result;
+        return response;
     }
 }

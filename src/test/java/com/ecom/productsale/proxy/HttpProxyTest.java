@@ -1,5 +1,6 @@
 package com.ecom.productsale.proxy;
 
+import com.ecom.productsale.model.VisaResponse;
 import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -33,8 +34,8 @@ public class HttpProxyTest {
     @Test
     public void testHelloWord() {
         try {
-            String res = proxy.helloWorld(endpointUrl);
-            assertTrue(res != null && res.contains("helloworld"));
+            VisaResponse res = proxy.helloWorld(endpointUrl);
+            assertTrue(res != null && res.getMessage().equals("helloworld"));
         } catch (Exception e) {
             fail(e);
         }
@@ -43,7 +44,7 @@ public class HttpProxyTest {
     @Test
     public void testExecuteHttpSync() {
         try {
-            String res = syncClientProxy.execute(endpointUrl);
+            VisaResponse res = syncClientProxy.execute(endpointUrl);
             System.out.println(res);
         } catch (Exception e) {
             fail(e);
@@ -53,7 +54,7 @@ public class HttpProxyTest {
     @Test
     public void testExecuteHttpASync() throws InterruptedException {
         try {
-            String res = asyncClientProxy.execute(endpointUrl);
+            VisaResponse res = asyncClientProxy.execute(endpointUrl);
             System.out.println(res);
         } catch (Exception e) {
             fail(e);

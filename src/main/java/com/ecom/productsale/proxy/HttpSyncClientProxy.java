@@ -1,5 +1,8 @@
 package com.ecom.productsale.proxy;
 
+import com.ecom.productsale.model.VisaResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.RequestConfig;
@@ -71,7 +74,7 @@ public class HttpSyncClientProxy {
                 .build();
     }
 
-    public String execute(String url) throws ExecutionException, InterruptedException, IOException {
+    public VisaResponse execute(String url) throws ExecutionException, InterruptedException, IOException {
         CompletableFuture<HttpResponse> future = CompletableFuture.supplyAsync(() -> {
             try {
                 HttpGet httpGet = new HttpGet(url);
@@ -86,7 +89,11 @@ public class HttpSyncClientProxy {
             }
         }, executorService);
 
-        return EntityUtils.toString(future.get().getEntity(), "UTF-8");
+        String result = EntityUtils.toString(future.get().getEntity(), "UTF-8");
+//        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        // the field name of java object should be same with json string's
+//        return objectMapper.readValue(result, VisaResponse.class);
+        return null;
     }
 
     /*
